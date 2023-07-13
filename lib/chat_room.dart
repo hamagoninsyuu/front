@@ -183,6 +183,14 @@ class ChatRoomState extends State<ChatRoom> {
                             ),
                             onPressed: () {
                               // ボタンが押された時の処理
+                              _addMessage(types.TextMessage(
+                                author: _user,
+                                createdAt:
+                                    DateTime.now().millisecondsSinceEpoch,
+                                id: randomString(),
+                                text: data['text'] as String? ?? '',
+                              ));
+                              Navigator.pop(context); // ボトムシートを閉じる
                             },
                             child: Container(
                               width: double.infinity,
