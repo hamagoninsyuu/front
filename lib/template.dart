@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TextListScreen extends StatelessWidget {
+class TextListScreen extends StatefulWidget {
+  @override
+  _TextListScreenState createState() => _TextListScreenState();
+}
+
+class _TextListScreenState extends State<TextListScreen> {
+  TextEditingController _textEditingController = TextEditingController();
+
+  Future<int> _generateId() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('template').get();
+    int count = snapshot.docs.length;
+    return count + 1;
+  }
+
+  Future<void> _addTextToFirestore(String text, int id) async {
+    await FirebaseFirestore.instance.collection('template').add({
+      'id': id,
+      'text': text,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +72,34 @@ class TextListScreen extends StatelessWidget {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          int id = await _generateId();
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Enter Text'),
+                content: TextField(
+                  controller: _textEditingController,
+                ),
+                actions: [
+                  ElevatedButton(
+                    child: Text('Add'),
+                    onPressed: () {
+                      String enteredText = _textEditingController.text;
+                      _addTextToFirestore(enteredText, id);
+                      _textEditingController.clear();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
