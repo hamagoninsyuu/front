@@ -123,7 +123,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                       child: Text(
                         '通知',
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                           color: toggleValue1 ? Colors.blue : Colors.red,
                         ),
                       ),
@@ -135,7 +135,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                       child: Text(
                         '録画',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           color: toggleValue2 ? Colors.blue : Colors.red,
                         ),
                       ),

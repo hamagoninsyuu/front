@@ -26,53 +26,83 @@ class _TextListScreenState extends State<TextListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Text List'),
+      // appBar: AppBar(
+      //   title: Text('Text List'),
+      // ),
+      body: Stack(
+        children: [
+          Positioned.fill(  // 背景画像
+            child: Image.asset(
+              'images/background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          Positioned( // 鳥のアイコン
+            top: 30,
+            left: -10,
+            width: 400,
+            height: 400,
+            child: Image.asset(
+              'images/bird.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          Center(
+            child: Container(
+              width: 320.0,
+              height: 300.0,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all( // 四角形の黒い枠線
+                  color: Colors.black,
+                  width: 2.0,
+                ),
+              ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('template')
+                    .orderBy('text')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final texts = snapshot.data!.docs
+                      .map((doc) => doc['text'] as String)
+                      .toList();
+                  return ListView.builder(
+                    itemCount: texts.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Center(
+                          child: Text(
+                            texts[index],
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.black,
+                              decorationThickness: 2.0,
+                              decorationStyle: TextDecorationStyle.solid,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
-      body: Container(
-        width: 320.0,
-        height: 300.0,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('template')
-              .orderBy('text')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final texts = snapshot.data!.docs
-                .map((doc) => doc['text'] as String)
-                .toList();
-            return ListView.builder(
-              itemCount: texts.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: Center(
-                    child: Text(
-                      texts[index],
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.black,
-                        decorationThickness: 2.0,
-                        decorationStyle: TextDecorationStyle.solid,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      ),
+          
+        
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           int id = await _generateId();

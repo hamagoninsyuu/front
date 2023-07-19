@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:chat/template.dart';
+import 'package:chat/chat_room.dart';
 import 'package:chat/home.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'firebase_options.dart';
@@ -21,7 +23,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'chat App',
-      home: MyToggleButtonScreen(),
+      debugShowCheckedModeBanner: false,  // ラベル消す
+      home: TextListScreen(), // 定型文に飛ぶ
+      // home: ChatRoom(), // チャット画面に飛ぶ
+      // home: MyToggleButtonScreen(), // ホーム画面に飛ぶ
     );
   }
 }
