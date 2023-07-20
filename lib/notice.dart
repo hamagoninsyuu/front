@@ -7,29 +7,28 @@ import 'package:chat/home.dart';
 import 'package:chat/component.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TextListScreen extends StatefulWidget {
+class TimeListScreen extends StatefulWidget {
   @override
-  _TextListScreenState createState() => _TextListScreenState();
+  _TimeListScreenState createState() => _TimeListScreenState();
 }
 
-class _TextListScreenState extends State<TextListScreen> {
+class _TimeListScreenState extends State<TimeListScreen> {
   TextEditingController _textEditingController = TextEditingController();
 
   Future<int> _generateId() async {
     QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('template').get();
+        await FirebaseFirestore.instance.collection('photos').get();
     int count = snapshot.docs.length;
     return count + 1;
   }
 
-  Future<void> _addTextToFirestore(String text, int id) async {
-    await FirebaseFirestore.instance.collection('template').add({
-      'id': id,
-      'text': text,
+  Future<void> _addTextToFirestore(String time) async {
+    await FirebaseFirestore.instance.collection('photos').add({
+      'time': time,
     });
   }
 
-  int selectedIndex = 0; // ボタンがどこから始まるか
+  int selectedIndex = 3; // ボタンがどこから始まるか
   List<Widget> pegelist = [
     template(),
     camera(),
@@ -76,8 +75,8 @@ class _TextListScreenState extends State<TextListScreen> {
               ),
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('template')
-                    .orderBy('text')
+                    .collection('photos')
+                    .orderBy('time')
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -86,7 +85,7 @@ class _TextListScreenState extends State<TextListScreen> {
                     );
                   }
                   final texts = snapshot.data!.docs
-                      .map((doc) => doc['text'] as String)
+                      .map((doc) => doc['time'] as String)
                       .toList();
                   return ListView.builder(
                     itemCount: texts.length,
@@ -113,34 +112,6 @@ class _TextListScreenState extends State<TextListScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          int id = await _generateId();
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Enter Text'),
-                content: TextField(
-                  controller: _textEditingController,
-                ),
-                actions: [
-                  ElevatedButton(
-                    child: Text('Add'),
-                    onPressed: () {
-                      String enteredText = _textEditingController.text;
-                      _addTextToFirestore(enteredText, id);
-                      _textEditingController.clear();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        child: Icon(Icons.add),
       ),
       bottomNavigationBar: BottomAppBar(
         child: BottomNavigationBar(
