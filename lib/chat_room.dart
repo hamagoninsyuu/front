@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:chat/template.dart';
+import 'package:chat/chat_room.dart';
+import 'package:chat/home.dart';
+import 'package:chat/component.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,52 +73,124 @@ class ChatRoomState extends State<ChatRoom> {
     ));
   }
 
+  int selectedIndex = 1; // ボタンがどこから始まるか
+  List<Widget> pegelist = [
+    template(),
+    camera(),
+    home(),
+    notice(),
+    info()
+  ]; //リスト一覧
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Container(
-          transform: Matrix4.translationValues(22.5, 300.0, 0.0),
-          padding: EdgeInsets.all(1.0),
-          width: 320.0,
-          height: 340.0,
-          decoration: BoxDecoration(
-            border: Border.all(width: 1.0),
-            // color: Colors.white,
-            // borderRadius: BorderRadius.circular(34.0),
-          ),
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: Chat(
-                    theme: const DefaultChatTheme(
-                        sendButtonIcon: Icon(
-                          Icons.send, // 送信ボタンに表示するアイコン
-                          color: Colors.grey, // アイコンの色を指定
-                        ),
-                        primaryColor: Colors.blue, // メッセージの背景色の変更
-                        userAvatarNameColors: [Colors.blue], // ユーザー名の文字色の変更
-                        inputContainerDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(20)), // 角丸にするための設定
-                          color: Colors.blueGrey, // コンテナの背景色を指定
-                        ),
-                        attachmentButtonIcon: Icon(Icons.list_alt)), //定型文のアイコン
-                    messages: _messages,
-                    onSendPressed: _handleSendPressed,
-                    user: _user,
-                    showUserAvatars: true,
-                    showUserNames: true,
-                    l10n: const ChatL10nJa(),
-                    //onAttachmentPressed: () {}, // 定型文のアイコンを表示
-                    onAttachmentPressed: _handleAttachmentPressed,
-                  ),
-                ),
-              ),
-            ],
+  Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+  
+    return Scaffold(
+      body: Container(
+        width: screenSize.width,
+        height: screenSize.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/background.png'),
+            fit: BoxFit.cover
           ),
         ),
-      );
+        child: Stack(
+          children: [
+            Container(
+              width: 320.0,
+              height: 340.0,
+              transform: Matrix4.translationValues(22.5, 268.0, 0.0),
+              padding: EdgeInsets.all(1.0),
+              // decoration: BoxDecoration(
+              //   border: Border.all(width: 1.0),
+              //   // color: Colors.white,
+              //   // borderRadius: BorderRadius.circular(34.0),
+              // ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      child: Chat(
+                        theme: const DefaultChatTheme(
+                          sendButtonIcon: Icon(
+                            Icons.send, // 送信ボタンに表示するアイコン
+                            color: Colors.grey, // アイコンの色を指定
+                          ),
+                          primaryColor: Colors.blue, // メッセージの背景色の変更
+                          userAvatarNameColors: [Colors.blue], // ユーザー名の文字色の変更
+                          inputContainerDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)), // 角丸にするための設定
+                            color: Colors.blueGrey, // コンテナの背景色を指定
+                          ),
+                          attachmentButtonIcon: Icon(Icons.list_alt)
+                        ), //定型文のアイコン
+                        messages: _messages,
+                        onSendPressed: _handleSendPressed,
+                        user: _user,
+                        showUserAvatars: true,
+                        showUserNames: true,
+                        l10n: const ChatL10nJa(),
+                        //onAttachmentPressed: () {}, // 定型文のアイコンを表示
+                        onAttachmentPressed: _handleAttachmentPressed,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list_alt),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.help_outline),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+          ],
+          currentIndex: selectedIndex,
+          onTap: (int index) {
+            setState(() {
+              selectedIndex = index;
+            });
+
+            // 画面遷移の処理
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 
   void _addMessage(types.Message message) {
     setState(() {

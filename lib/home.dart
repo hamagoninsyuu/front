@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:chat/template.dart';
+import 'package:chat/chat_room.dart';
+import 'package:chat/home.dart';
+import 'package:chat/component.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CupertinoSwitchTile extends StatelessWidget {
@@ -36,11 +40,38 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
   bool toggleValue1 = false;
   bool toggleValue2 = false;
 
+  int selectedIndex = 2; // ボタンがどこから始まるか
+  List<Widget> pegelist = [
+    template(),
+    camera(),
+    home(),
+    notice(),
+    info(),
+  ]; //リスト一覧
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          Positioned.fill(
+            // 背景画像
+            child: Image.asset(
+              'images/background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            // 鳥のアイコン
+            top: 30,
+            left: -10,
+            width: 400,
+            height: 400,
+            child: Image.asset(
+              'images/bird.png',
+              fit: BoxFit.cover,
+            ),
+          ),
           Positioned(
             child: Container(
               transform: Matrix4.translationValues(20.0, 100.0, 0.0),
@@ -99,43 +130,47 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                   alignment: Alignment.center,
                   children: [
                     Container(
+                      // 通知の赤い丸
                       width: 9,
                       height: 9,
-                      transform: Matrix4.translationValues(-90.0, 100.0, 0.0),
+                      transform: Matrix4.translationValues(-90.0, 135.0, 0.0),
                       decoration: BoxDecoration(
                         color: toggleValue1 ? Colors.blue : Colors.red,
                         shape: BoxShape.circle,
                       ),
                     ),
                     Container(
+                      // 録画の赤い丸
                       width: 9,
                       height: 9,
-                      transform: Matrix4.translationValues(40.0, 100.0, 0.0),
+                      transform: Matrix4.translationValues(40.0, 135.0, 0.0),
                       decoration: BoxDecoration(
                         color: toggleValue2 ? Colors.blue : Colors.red,
                         shape: BoxShape.circle,
                       ),
                     ),
                     Container(
+                      // 通知という文字
                       width: 40,
                       height: 50,
-                      transform: Matrix4.translationValues(-60.0, 110.0, 0.0),
+                      transform: Matrix4.translationValues(-60.0, 150.0, 0.0),
                       child: Text(
                         '通知',
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                           color: toggleValue1 ? Colors.blue : Colors.red,
                         ),
                       ),
                     ),
                     Container(
+                      // 録画という文字
                       width: 40,
                       height: 50,
-                      transform: Matrix4.translationValues(70.0, 110.0, 0.0),
+                      transform: Matrix4.translationValues(70.0, 150.0, 0.0),
                       child: Text(
                         '録画',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           color: toggleValue2 ? Colors.blue : Colors.red,
                         ),
                       ),
@@ -143,7 +178,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                   ],
                 ),
                 Container(
-                  transform: Matrix4.translationValues(0, 80, 0.0),
+                  transform: Matrix4.translationValues(-5, 110, 0.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -171,7 +206,53 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
               ],
             ),
           ),
+          // pegelist[selectedIndex],
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list_alt),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.help_outline),
+              label: ' ',
+              backgroundColor: Colors.black,
+            ),
+          ],
+          currentIndex: selectedIndex,
+          onTap: (int index) {
+            setState(() {
+              selectedIndex = index;
+            });
+
+            // 画面遷移の処理
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+              ),
+            );
+          },
+        ),
       ),
     );
   }
