@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
+import 'package:chat/notice.dart';
 import 'package:chat/home.dart';
-import 'package:chat/component.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TextListScreen extends StatefulWidget {
@@ -31,16 +31,17 @@ class _TextListScreenState extends State<TextListScreen> {
 
   int selectedIndex = 0; // ボタンがどこから始まるか
   List<Widget> pegelist = [
-    template(),
-    camera(),
-    home(),
-    notice(),
-    info(),
+    TextListScreen(),
+    ChatRoom(),
+    MyToggleButtonScreen(),
+    TimeListScreen(),
+    TextListScreen()
   ]; //リスト一覧
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: true,  // キーボードかぶせる
       body: Stack(
         children: [
           Positioned.fill(
@@ -142,7 +143,7 @@ class _TextListScreenState extends State<TextListScreen> {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: BottomAppBar(  // 何個の要素を置くか。今回は5個
         child: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -171,8 +172,8 @@ class _TextListScreenState extends State<TextListScreen> {
               backgroundColor: Colors.black,
             ),
           ],
-          currentIndex: selectedIndex,
-          onTap: (int index) {
+          currentIndex: selectedIndex,  // 今何個目の選択肢か
+          onTap: (int index) {  // ボタン押されたとき、どこが押されたかをselectedIndexに入れる
             setState(() {
               selectedIndex = index;
             });
