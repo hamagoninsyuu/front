@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
+import 'package:chat/notice.dart';
 import 'package:chat/home.dart';
-import 'package:chat/component.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CupertinoSwitchTile extends StatelessWidget {
@@ -42,11 +42,11 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
 
   int selectedIndex = 2; // ボタンがどこから始まるか
   List<Widget> pegelist = [
-    template(),
-    camera(),
-    home(),
-    notice(),
-    info(),
+    TextListScreen(),
+    ChatRoom(),
+    MyToggleButtonScreen(),
+    TimeListScreen(),
+    TextListScreen()
   ]; //リスト一覧
 
   @override
@@ -117,7 +117,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                   String imageURL =
                       snapshot.data!.docs[0].get('imageURL')?.toString() ?? '';
 
-                  return Image.network(imageURL);
+                  return Image.network(imageURL, fit: BoxFit.cover,); //  fit: BoxFit.coverでサイズいっぱいの画像になる
                 },
               ),
             ),
@@ -206,7 +206,6 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
               ],
             ),
           ),
-          // pegelist[selectedIndex],
         ],
       ),
       bottomNavigationBar: BottomAppBar(

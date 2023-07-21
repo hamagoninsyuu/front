@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
+import 'package:chat/notice.dart';
 import 'package:chat/home.dart';
-import 'package:chat/component.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -75,73 +75,122 @@ class ChatRoomState extends State<ChatRoom> {
 
   int selectedIndex = 1; // ボタンがどこから始まるか
   List<Widget> pegelist = [
-    template(),
-    camera(),
-    home(),
-    notice(),
-    info()
+    TextListScreen(),
+    ChatRoom(),
+    MyToggleButtonScreen(),
+    TimeListScreen(),
+    TextListScreen()
   ]; //リスト一覧
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-  
+
     return Scaffold(
-      body: Container(
-        width: screenSize.width,
-        height: screenSize.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/background.png'),
-            fit: BoxFit.cover
+      resizeToAvoidBottomInset: true, // キーボードかぶせる
+      body: SingleChildScrollView(
+        child: Container(
+          width: screenSize.width,
+          height: screenSize.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('images/background.png'), fit: BoxFit.cover),
           ),
-        ),
-        child: Stack(
-          children: [
-            Container(
-              width: 320.0,
-              height: 340.0,
-              transform: Matrix4.translationValues(22.5, 268.0, 0.0),
-              padding: EdgeInsets.all(1.0),
-              // decoration: BoxDecoration(
-              //   border: Border.all(width: 1.0),
-              //   // color: Colors.white,
-              //   // borderRadius: BorderRadius.circular(34.0),
-              // ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      child: Chat(
-                        theme: const DefaultChatTheme(
-                          sendButtonIcon: Icon(
-                            Icons.send, // 送信ボタンに表示するアイコン
-                            color: Colors.grey, // アイコンの色を指定
-                          ),
-                          primaryColor: Colors.blue, // メッセージの背景色の変更
-                          userAvatarNameColors: [Colors.blue], // ユーザー名の文字色の変更
-                          inputContainerDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)), // 角丸にするための設定
-                            color: Colors.blueGrey, // コンテナの背景色を指定
-                          ),
-                          attachmentButtonIcon: Icon(Icons.list_alt)
-                        ), //定型文のアイコン
-                        messages: _messages,
-                        onSendPressed: _handleSendPressed,
-                        user: _user,
-                        showUserAvatars: true,
-                        showUserNames: true,
-                        l10n: const ChatL10nJa(),
-                        //onAttachmentPressed: () {}, // 定型文のアイコンを表示
-                        onAttachmentPressed: _handleAttachmentPressed,
+          child: Stack(
+            children: [
+              Container(
+                width: 320.0,
+                height: 340.0,
+                transform: Matrix4.translationValues(22.5, 268.0, 0.0),
+                padding: EdgeInsets.all(1.0),
+                // decoration: BoxDecoration(
+                //   border: Border.all(width: 1.0),
+                //   // color: Colors.white,
+                //   // borderRadius: BorderRadius.circular(34.0),
+                // ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: Chat(
+                          theme: const DefaultChatTheme(
+                              sendButtonIcon: Icon(
+                                Icons.send, // 送信ボタンに表示するアイコン
+                                color: Colors.grey, // アイコンの色を指定
+                              ),
+                              primaryColor: Colors.blue, // メッセージの背景色の変更
+                              userAvatarNameColors: [
+                                Colors.blue
+                              ], // ユーザー名の文字色の変更
+                              inputContainerDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(20)), // 角丸にするための設定
+                                color: Colors.blueGrey, // コンテナの背景色を指定
+                              ),
+                              attachmentButtonIcon:
+                                  Icon(Icons.list_alt)), //定型文のアイコン
+                          messages: _messages,
+                          onSendPressed: _handleSendPressed,
+                          user: _user,
+                          showUserAvatars: true,
+                          showUserNames: true,
+                          l10n: const ChatL10nJa(),
+                          //onAttachmentPressed: () {}, // 定型文のアイコンを表示
+                          onAttachmentPressed: _handleAttachmentPressed,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              // グレー色の四角形
+              Positioned(
+                top: 10,
+                left: 20,
+                right: 20,
+                child: Center(
+                  child: Container(
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('photos')
+                          .orderBy('imageURL', descending: true)
+                          .limit(1)
+                          .snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
+
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return Text('No data available');
+                        }
+
+                        // 最新の画像URLを取得
+                        String imageURL = snapshot.data!.docs[0]
+                                .get('imageURL')
+                                ?.toString() ??
+                            '';
+
+                        return Image.network(
+                          imageURL,
+                          fit: BoxFit.cover,
+                        ); //  fit: BoxFit.coverでサイズいっぱいの画像になる
+                      },
+                    ),
+                    height: 245, // Change the height as needed
+                    width: 350,
+                    color: Colors.grey, // Set the color to grey
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -291,6 +340,18 @@ class ChatRoomState extends State<ChatRoom> {
   }
 
   void _handleSendPressed(types.PartialText message) {
+    // メッセージをFirestoreに保存する処理
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc()
+        .set({
+          'message': message.text,
+          'senderId': _user.id,
+          'receiverId': _other.id,
+        })
+        .then((_) => print('Message added to Firestore!'))
+        .catchError((error) => print('Error adding message: $error'));
+
     final textMessage = types.TextMessage(
       author: _user,
       createdAt: DateTime.now().millisecondsSinceEpoch,

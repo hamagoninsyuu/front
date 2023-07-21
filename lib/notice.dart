@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
 import 'package:chat/home.dart';
-import 'package:chat/component.dart';
+import 'package:chat/notice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TimeListScreen extends StatefulWidget {
@@ -30,11 +30,11 @@ class _TimeListScreenState extends State<TimeListScreen> {
 
   int selectedIndex = 3; // ボタンがどこから始まるか
   List<Widget> pegelist = [
-    template(),
-    camera(),
-    home(),
-    notice(),
-    info(),
+    TextListScreen(),
+    ChatRoom(),
+    MyToggleButtonScreen(),
+    TimeListScreen(),
+    TextListScreen()
   ]; //リスト一覧
 
   @override
