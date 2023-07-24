@@ -93,14 +93,26 @@ class _TimeListScreenState extends State<TimeListScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8.0),
-                        child: Center(
-                          child: Text(
-                            texts[index],
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.black,
-                              decorationThickness: 2.0,
-                              decorationStyle: TextDecorationStyle.solid,
+                        child: GestureDetector(
+                          onTap: () {
+                            // Handle the onTap event and navigate to the ChatRoom widget
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChatRoom(selectedTime: texts[index]),
+                              ),
+                            );
+                          },
+                          child: Center(
+                            child: Text(
+                              texts[index],
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                decorationColor: Colors.black,
+                                decorationThickness: 2.0,
+                                decorationStyle: TextDecorationStyle.solid,
+                              ),
                             ),
                           ),
                         ),

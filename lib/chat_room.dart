@@ -16,7 +16,9 @@ String randomString() {
 }
 
 class ChatRoom extends StatefulWidget {
-  const ChatRoom({Key? key}) : super(key: key);
+  final String? selectedTime; // Add selectedTime as a parameter
+
+  const ChatRoom({Key? key, this.selectedTime}) : super(key: key);
 
   @override
   ChatRoomState createState() => ChatRoomState();
@@ -56,6 +58,8 @@ class ChatRoomState extends State<ChatRoom> {
       imageUrl:
           "https://cdn-xtrend.nikkei.com/atcl/contents/casestudy/00012/00600/03.png?__scale=w:600,h:403&_sh=01f0690a70");
 
+  String? _dateDocumentId;
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +75,44 @@ class ChatRoomState extends State<ChatRoom> {
       id: randomString(),
       text: "お荷物をお届けに来ました",
     ));
+    // Convert selectedTime to Firestore document ID
+    _dateDocumentId = _getDocumentIdFromSelectedTime(widget.selectedTime);
+    if (_dateDocumentId != null) {
+      _fetchMessageHistory();
+    }
+  }
+
+  void _fetchMessageHistory() {
+    FirebaseFirestore.instance
+        .collection('photos')
+        .doc(_dateDocumentId)
+        .collection('chats')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isEmpty) {
+        // No messages for the selected date
+        return;
+      }
+
+      final List<types.Message> messages = [];
+      snapshot.docs.forEach((doc) {
+        final data = doc.data();
+        final textMessage = types.TextMessage(
+          author:
+              _other, // Change this to sender or receiver based on 'senderId' and 'receiverId'
+          createdAt: (data['timestamp'] as Timestamp).millisecondsSinceEpoch,
+          id: doc.id,
+          text: data['message'] as String? ?? '',
+        );
+        messages.add(textMessage);
+      });
+
+      setState(() {
+        _messages.clear();
+        _messages.addAll(messages);
+      });
+    });
   }
 
   int selectedIndex = 1; // ボタンがどこから始まるか
@@ -339,18 +381,23 @@ class ChatRoomState extends State<ChatRoom> {
     );
   }
 
-  void _handleSendPressed(types.PartialText message) {
-    // メッセージをFirestoreに保存する処理
-    FirebaseFirestore.instance
-        .collection('chats')
-        .doc()
-        .set({
-          'message': message.text,
-          'senderId': _user.id,
-          'receiverId': _other.id,
-        })
-        .then((_) => print('Message added to Firestore!'))
-        .catchError((error) => print('Error adding message: $error'));
+  void _handleSendPressed(types.PartialText message) async {
+    final dateDocumentId = _getDocumentIdFromSelectedTime(widget.selectedTime);
+
+    if (dateDocumentId != null) {
+      await FirebaseFirestore.instance
+          .collection('photos')
+          .doc(dateDocumentId)
+          .collection('chats')
+          .add({
+            'message': message.text,
+            'senderId': _user.id,
+            'receiverId': _other.id,
+            'timestamp': FieldValue.serverTimestamp(),
+          })
+          .then((_) => print('Message added to Firestore!'))
+          .catchError((error) => print('Error adding message: $error'));
+    }
 
     final textMessage = types.TextMessage(
       author: _user,
@@ -360,5 +407,15 @@ class ChatRoomState extends State<ChatRoom> {
     );
 
     _addMessage(textMessage);
+  }
+
+  String? _getDocumentIdFromSelectedTime(String? selectedTime) {
+    // Convert selectedTime (formatted as "YYYY-MM-DD") to Firestore document ID
+    // For example, "2023-07-21" will be converted to "20230721"
+    if (selectedTime == null) {
+      return null;
+    }
+
+    return selectedTime.replaceAll('-', '');
   }
 }
