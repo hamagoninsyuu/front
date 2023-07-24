@@ -1,7 +1,6 @@
 // import 'dart:js_util';
 
 import 'package:flutter/material.dart';
-import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
 import 'package:chat/notice.dart';
 import 'package:chat/home.dart';

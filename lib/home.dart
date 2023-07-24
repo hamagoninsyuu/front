@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
 import 'package:chat/notice.dart';
-import 'package:chat/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CupertinoSwitchTile extends StatelessWidget {

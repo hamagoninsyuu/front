@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
 import 'package:chat/home.dart';
-import 'package:chat/notice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TimeListScreen extends StatefulWidget {
