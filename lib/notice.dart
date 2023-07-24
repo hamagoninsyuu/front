@@ -104,13 +104,22 @@ class _TimeListScreenState extends State<TimeListScreen> {
                             );
                           },
                           child: Center(
-                            child: Text(
-                              texts[index],
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                decorationColor: Colors.black,
-                                decorationThickness: 2.0,
-                                decorationStyle: TextDecorationStyle.solid,
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 8.0), // 下線の下に8ピクセルの隙間を作成
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 2.0,
+                                    color: Colors.black
+                                  )
+                                ), // 下線を作成
+                              ),
+                              child: Text(
+                                texts[index],
+                                style: TextStyle(
+                                  decoration: TextDecoration.none, // 下線はContainerで作成するので、Textの下線を無効化
+                                  fontSize: 15.0, // Update the fontSize to your desired value
+                                ),
                               ),
                             ),
                           ),

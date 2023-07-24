@@ -93,17 +93,25 @@ class _TextListScreenState extends State<TextListScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        child: Center(
-                          child: Text(
-                            texts[index],
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.black,
-                              decorationThickness: 2.0,
-                              decorationStyle: TextDecorationStyle.solid,
+                          horizontal: 16.0, vertical: 5.0),
+                          child: Center(
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 8.0), // 下線の下に8ピクセルの隙間を作成
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 2.0,
+                                    color: Colors.black
+                                  )
+                                ), // 下線を作成
+                              ),
+                              child: Text(
+                                texts[index],
+                                style: TextStyle(
+                                  decoration: TextDecoration.none, // 下線はContainerで作成するので、Textの下線を無効化
+                                ),
+                              ),
                             ),
-                          ),
                         ),
                       );
                     },
@@ -142,7 +150,8 @@ class _TextListScreenState extends State<TextListScreen> {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomAppBar(  // 何個の要素を置くか。今回は5個
+      bottomNavigationBar: BottomAppBar(
+        // 何個の要素を置くか。今回は5個
         child: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -171,8 +180,9 @@ class _TextListScreenState extends State<TextListScreen> {
               backgroundColor: Colors.black,
             ),
           ],
-          currentIndex: selectedIndex,  // 今何個目の選択肢か
-          onTap: (int index) {  // ボタン押されたとき、どこが押されたかをselectedIndexに入れる
+          currentIndex: selectedIndex, // 今何個目の選択肢か
+          onTap: (int index) {
+            // ボタン押されたとき、どこが押されたかをselectedIndexに入れる
             setState(() {
               selectedIndex = index;
             });
