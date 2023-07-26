@@ -144,11 +144,6 @@ class ChatRoomState extends State<ChatRoom> {
                 height: 340.0,
                 transform: Matrix4.translationValues(22.5, 268.0, 0.0),
                 padding: EdgeInsets.all(1.0),
-                // decoration: BoxDecoration(
-                //   border: Border.all(width: 1.0),
-                //   // color: Colors.white,
-                //   // borderRadius: BorderRadius.circular(34.0),
-                // ),
                 child: Column(
                   children: [
                     Expanded(
@@ -234,49 +229,52 @@ class ChatRoomState extends State<ChatRoom> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.camera_alt),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.help_outline),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-          ],
-          currentIndex: selectedIndex,
-          onTap: (int index) {
-            setState(() {
-              selectedIndex = index;
-            });
-
-            // 画面遷移の処理
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+      bottomNavigationBar:  ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0)),
+        child:BottomAppBar(
+          child: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list_alt),
+                label: ' ',
+                backgroundColor: Colors.black,
               ),
-            );
-          },
+              BottomNavigationBarItem(
+                icon: Icon(Icons.camera_alt),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.help_outline),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+            ],
+            currentIndex: selectedIndex,
+            onTap: (int index) {
+              setState(() {
+                selectedIndex = index;
+              });
+
+              // 画面遷移の処理
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

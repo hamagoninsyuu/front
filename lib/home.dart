@@ -207,49 +207,52 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.camera_alt),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.help_outline),
-              label: ' ',
-              backgroundColor: Colors.black,
-            ),
-          ],
-          currentIndex: selectedIndex,
-          onTap: (int index) {
-            setState(() {
-              selectedIndex = index;
-            });
-
-            // 画面遷移の処理
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+      bottomNavigationBar:  ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0)),
+        child:BottomAppBar(
+          child: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list_alt),
+                label: ' ',
+                backgroundColor: Colors.black,
               ),
-            );
-          },
+              BottomNavigationBarItem(
+                icon: Icon(Icons.camera_alt),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.help_outline),
+                label: ' ',
+                backgroundColor: Colors.black,
+              ),
+            ],
+            currentIndex: selectedIndex,
+            onTap: (int index) {
+              setState(() {
+                selectedIndex = index;
+              });
+
+              // 画面遷移の処理
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
