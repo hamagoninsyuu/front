@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:chat/template.dart';
 import 'package:chat/notice.dart';
 import 'package:chat/home.dart';
+import 'package:chat/information.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,7 +53,7 @@ class ChatRoomState extends State<ChatRoom> {
   // 相手
   final _other = const types.User(
       id: 'delivery',
-      firstName: "クロネコヤマト",
+      firstName: "篠原",
       lastName: "宅急便",
       imageUrl:
           "https://cdn-xtrend.nikkei.com/atcl/contents/casestudy/00012/00600/03.png?__scale=w:600,h:403&_sh=01f0690a70");
@@ -66,7 +67,7 @@ class ChatRoomState extends State<ChatRoom> {
       author: _other,
       createdAt: DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
-      text: "クロネコヤマトです",
+      text: "篠原宅急便です",
     ));
     _addMessage(types.TextMessage(
       author: _other,
@@ -120,7 +121,7 @@ class ChatRoomState extends State<ChatRoom> {
     ChatRoom(),
     MyToggleButtonScreen(),
     TimeListScreen(),
-    TextListScreen()
+    InformationScreen()
   ]; //リスト一覧
 
   @override
@@ -229,51 +230,88 @@ class ChatRoomState extends State<ChatRoom> {
           ),
         ),
       ),
-      bottomNavigationBar:  ClipRRect(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0)),
-        child:BottomAppBar(
-          child: BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list_alt),
-                label: ' ',
-                backgroundColor: Colors.black,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.camera_alt),
-                label: ' ',
-                backgroundColor: Colors.black,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: ' ',
-                backgroundColor: Colors.black,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                label: ' ',
-                backgroundColor: Colors.black,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.help_outline),
-                label: ' ',
-                backgroundColor: Colors.black,
-              ),
-            ],
-            currentIndex: selectedIndex,
-            onTap: (int index) {
-              setState(() {
-                selectedIndex = index;
-              });
-
-              // 画面遷移の処理
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+      bottomNavigationBar:  Theme(
+        data: ThemeData(
+          canvasColor: Colors.black, // ボトムナビゲーションの背景黒にする
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0)),
+          child:BottomAppBar(
+            child: BottomNavigationBar(
+              unselectedItemColor: Colors.grey, // 選択されてないアイコンの色
+              selectedItemColor: Colors.white, // 選択されたアイコンの色
+              items: [
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle, // 円形の装飾
+                      color: selectedIndex == 0 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                    ),
+                    padding: EdgeInsets.all(10.0), // アイコンの余白
+                    child: Icon(Icons.list_alt),
+                  ),
+                  label: ' ',
                 ),
-              );
-            },
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle, // 円形の装飾
+                      color: selectedIndex == 1 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                    ),
+                    padding: EdgeInsets.all(10.0), // アイコンの余白
+                    child: Icon(Icons.camera_alt),
+                  ),
+                  label: ' ',
+                ),
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle, // 円形の装飾
+                      color: selectedIndex == 2 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                    ),
+                    padding: EdgeInsets.all(10.0), // アイコンの余白
+                    child: Icon(Icons.home),
+                  ),
+                  label: ' ',
+                ),
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle, // 円形の装飾
+                      color: selectedIndex == 3 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                    ),
+                    padding: EdgeInsets.all(10.0), // アイコンの余白
+                    child: Icon(Icons.notifications),
+                  ),
+                  label: ' ',
+                ),
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle, // 円形の装飾
+                      color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                    ),
+                    padding: EdgeInsets.all(10.0), // アイコンの余白
+                    child: Icon(Icons.help_outline),
+                  ),
+                  label: ' ',
+                ),
+              ],
+              currentIndex: selectedIndex,
+              onTap: (int index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+
+                // 画面遷移の処理
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => pegelist[selectedIndex], // 選択された画面に遷移
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

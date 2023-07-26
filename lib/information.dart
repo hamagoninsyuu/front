@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
+import 'package:chat/notice.dart';
 import 'package:chat/home.dart';
-import 'package:chat/information.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chat/template.dart';
 
-class TimeListScreen extends StatefulWidget {
+class InformationScreen extends StatefulWidget {
+  const InformationScreen({super.key});
+
   @override
-  _TimeListScreenState createState() => _TimeListScreenState();
+  State<InformationScreen> createState() => _InformationScreenState();
 }
 
-class _TimeListScreenState extends State<TimeListScreen> {
-  TextEditingController _textEditingController = TextEditingController();
-
-  Future<int> _generateId() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('photos').get();
-    int count = snapshot.docs.length;
-    return count + 1;
-  }
-
-  Future<void> _addTextToFirestore(String time) async {
-    await FirebaseFirestore.instance.collection('photos').add({
-      'time': time,
-    });
-  }
-
-  int selectedIndex = 3; // ボタンがどこから始まるか
+class _InformationScreenState extends State<InformationScreen> {
+  int selectedIndex = 4; // ボタンがどこから始まるか
   List<Widget> pegelist = [
     TextListScreen(),
     ChatRoom(),
@@ -71,73 +57,29 @@ class _TimeListScreenState extends State<TimeListScreen> {
                   width: 2.0,
                 ),
               ),
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('photos')
-                    .orderBy('time')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  final texts = snapshot.data!.docs
-                      .map((doc) => doc['time'] as String)
-                      .toList();
-                  return ListView.builder(
-                    itemCount: texts.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Handle the onTap event and navigate to the ChatRoom widget
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ChatRoom(selectedTime: texts[index]),
-                              ),
-                            );
-                          },
-                          child: Center(
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 8.0), // 下線の下に8ピクセルの隙間を作成
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    width: 2.0,
-                                    color: Colors.black
-                                  )
-                                ), // 下線を作成
-                              ),
-                              child: Text(
-                                texts[index],
-                                style: TextStyle(
-                                  decoration: TextDecoration.none, // 下線はContainerで作成するので、Textの下線を無効化
-                                  fontSize: 15.0, // Update the fontSize to your desired value
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
+              child: Center(
+                child: Text(
+                  '使用方法画面\n制作中', // Text to be displayed in the center of the square
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20, // Adjust the font size as needed
+                    fontWeight: FontWeight.bold, // Adjust the font weight as needed
+                  ),
+                ),
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar:  Theme(
+      bottomNavigationBar: Theme(
         data: ThemeData(
           canvasColor: Colors.black, // ボトムナビゲーションの背景黒にする
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20.0),
+            bottom: Radius.circular(20.0)
+          ),
           child:BottomAppBar(
             child: BottomNavigationBar(
               unselectedItemColor: Colors.grey, // 選択されてないアイコンの色
@@ -219,4 +161,4 @@ class _TimeListScreenState extends State<TimeListScreen> {
       ),
     );
   }
-}
+} 
