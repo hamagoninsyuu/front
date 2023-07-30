@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:chat/template.dart';
 import 'package:chat/notice.dart';
 import 'package:chat/home.dart';
-import 'package:chat/information.dart';
+// import 'package:chat/information.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -121,7 +121,7 @@ class ChatRoomState extends State<ChatRoom> {
     ChatRoom(),
     MyToggleButtonScreen(),
     TimeListScreen(),
-    InformationScreen()
+    // InformationScreen()
   ]; //リスト一覧
 
   @override
@@ -285,17 +285,17 @@ class ChatRoomState extends State<ChatRoom> {
                   ),
                   label: ' ',
                 ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
-                    ),
-                    padding: EdgeInsets.all(10.0), // アイコンの余白
-                    child: Icon(Icons.help_outline),
-                  ),
-                  label: ' ',
-                ),
+                // BottomNavigationBarItem(
+                //   icon: Container(
+                //     decoration: BoxDecoration(
+                //       shape: BoxShape.circle, // 円形の装飾
+                //       color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                //     ),
+                //     padding: EdgeInsets.all(10.0), // アイコンの余白
+                //     child: Icon(Icons.help_outline),
+                //   ),
+                //   label: ' ',
+                // ),
               ],
               currentIndex: selectedIndex,
               onTap: (int index) {

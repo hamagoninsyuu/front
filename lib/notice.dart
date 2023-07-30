@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
 import 'package:chat/home.dart';
-import 'package:chat/information.dart';
+// import 'package:chat/information.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TimeListScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _TimeListScreenState extends State<TimeListScreen> {
     ChatRoom(),
     MyToggleButtonScreen(),
     TimeListScreen(),
-    InformationScreen()
+    // InformationScreen()
   ]; //リスト一覧
 
   @override
@@ -104,20 +104,21 @@ class _TimeListScreenState extends State<TimeListScreen> {
                           },
                           child: Center(
                             child: Container(
-                              padding: EdgeInsets.only(bottom: 8.0), // 下線の下に8ピクセルの隙間を作成
+                              padding: EdgeInsets.only(
+                                  bottom: 8.0), // 下線の下に8ピクセルの隙間を作成
                               decoration: BoxDecoration(
                                 border: Border(
-                                  bottom: BorderSide(
-                                    width: 2.0,
-                                    color: Colors.black
-                                  )
-                                ), // 下線を作成
+                                    bottom: BorderSide(
+                                        width: 2.0,
+                                        color: Colors.black)), // 下線を作成
                               ),
                               child: Text(
                                 texts[index],
                                 style: TextStyle(
-                                  decoration: TextDecoration.none, // 下線はContainerで作成するので、Textの下線を無効化
-                                  fontSize: 15.0, // Update the fontSize to your desired value
+                                  decoration: TextDecoration
+                                      .none, // 下線はContainerで作成するので、Textの下線を無効化
+                                  fontSize:
+                                      15.0, // Update the fontSize to your desired value
                                 ),
                               ),
                             ),
@@ -130,15 +131,26 @@ class _TimeListScreenState extends State<TimeListScreen> {
               ),
             ),
           ),
+          Positioned(
+            top: -60,
+            left: 60,
+            width: 500,
+            height: 500,
+            child: Icon(
+              Icons.remove_circle,
+              size: 50,
+            ),
+          )
         ],
       ),
-      bottomNavigationBar:  Theme(
+      bottomNavigationBar: Theme(
         data: ThemeData(
           canvasColor: Colors.black, // ボトムナビゲーションの背景黒にする
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0)),
-          child:BottomAppBar(
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20.0), bottom: Radius.circular(20.0)),
+          child: BottomAppBar(
             child: BottomNavigationBar(
               unselectedItemColor: Colors.grey, // 選択されてないアイコンの色
               selectedItemColor: Colors.white, // 選択されたアイコンの色
@@ -147,7 +159,9 @@ class _TimeListScreenState extends State<TimeListScreen> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 0 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                      color: selectedIndex == 0
+                          ? Colors.blue
+                          : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
                     ),
                     padding: EdgeInsets.all(10.0), // アイコンの余白
                     child: Icon(Icons.list_alt),
@@ -158,7 +172,9 @@ class _TimeListScreenState extends State<TimeListScreen> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 1 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                      color: selectedIndex == 1
+                          ? Colors.blue
+                          : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
                     ),
                     padding: EdgeInsets.all(10.0), // アイコンの余白
                     child: Icon(Icons.camera_alt),
@@ -169,7 +185,9 @@ class _TimeListScreenState extends State<TimeListScreen> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 2 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                      color: selectedIndex == 2
+                          ? Colors.blue
+                          : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
                     ),
                     padding: EdgeInsets.all(10.0), // アイコンの余白
                     child: Icon(Icons.home),
@@ -180,24 +198,28 @@ class _TimeListScreenState extends State<TimeListScreen> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 3 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                      color: selectedIndex == 3
+                          ? Colors.blue
+                          : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
                     ),
                     padding: EdgeInsets.all(10.0), // アイコンの余白
                     child: Icon(Icons.notifications),
                   ),
                   label: ' ',
                 ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
-                    ),
-                    padding: EdgeInsets.all(10.0), // アイコンの余白
-                    child: Icon(Icons.help_outline),
-                  ),
-                  label: ' ',
-                ),
+                // BottomNavigationBarItem(
+                //   icon: Container(
+                //     decoration: BoxDecoration(
+                //       shape: BoxShape.circle, // 円形の装飾
+                //       color: selectedIndex == 4
+                //           ? Colors.blue
+                //           : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                //     ),
+                //     padding: EdgeInsets.all(10.0), // アイコンの余白
+                //     child: Icon(Icons.help_outline),
+                //   ),
+                //   label: ' ',
+                // ),
               ],
               currentIndex: selectedIndex,
               onTap: (int index) {
