@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chat/template.dart';
 import 'package:chat/chat_room.dart';
 import 'package:chat/notice.dart';
-import 'package:chat/information.dart';
+// import 'package:chat/information.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CupertinoSwitchTile extends StatelessWidget {
@@ -37,8 +37,8 @@ class MyToggleButtonScreen extends StatefulWidget {
 }
 
 class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
-  bool toggleValue1 = false;
-  bool toggleValue2 = false;
+  bool toggleValue1 = true;  // 通知のトグル
+  bool toggleValue2 = true; // 録画のトグル
 
   int selectedIndex = 2; // ボタンがどこから始まるか
   List<Widget> pegelist = [
@@ -46,7 +46,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
     ChatRoom(),
     MyToggleButtonScreen(),
     TimeListScreen(),
-    InformationScreen()
+    // InformationScreen()
   ]; //リスト一覧
 
   @override
@@ -153,7 +153,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                       // 通知という文字
                       width: 40,
                       height: 50,
-                      transform: Matrix4.translationValues(-60.0, 150.0, 0.0),
+                      transform: Matrix4.translationValues(-60.0, 145.0, 0.0),
                       child: Text(
                         '通知',
                         style: TextStyle(
@@ -166,7 +166,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                       // 録画という文字
                       width: 40,
                       height: 50,
-                      transform: Matrix4.translationValues(70.0, 150.0, 0.0),
+                      transform: Matrix4.translationValues(70.0, 145.0, 0.0),
                       child: Text(
                         '録画',
                         style: TextStyle(
@@ -202,7 +202,7 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -263,17 +263,17 @@ class _MyToggleButtonScreenState extends State<MyToggleButtonScreen> {
                   ),
                   label: ' ',
                 ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
-                    ),
-                    padding: EdgeInsets.all(10.0), // アイコンの余白
-                    child: Icon(Icons.help_outline),
-                  ),
-                  label: ' ',
-                ),
+                // BottomNavigationBarItem( // ボタンは4つなので、コメントアウト
+                //   icon: Container(
+                //     decoration: BoxDecoration(
+                //       shape: BoxShape.circle, // 円形の装飾
+                //       color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                //     ),
+                //     padding: EdgeInsets.all(10.0), // アイコンの余白
+                //     child: Icon(Icons.help_outline),
+                //   ),
+                //   label: ' ',
+                // ),
               ],
               currentIndex: selectedIndex,
               onTap: (int index) {

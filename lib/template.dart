@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:chat/chat_room.dart';
 import 'package:chat/notice.dart';
 import 'package:chat/home.dart';
-import 'package:chat/information.dart';
+// import 'package:chat/information.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TextListScreen extends StatefulWidget {
@@ -33,7 +33,7 @@ class _TextListScreenState extends State<TextListScreen> {
     ChatRoom(),
     MyToggleButtonScreen(),
     TimeListScreen(),
-    InformationScreen()
+    // InformationScreen()
   ]; //リスト一覧
 
   @override
@@ -60,7 +60,9 @@ class _TextListScreenState extends State<TextListScreen> {
               fit: BoxFit.cover,
             ),
           ),
-          Center(
+          Positioned(
+            top: 160,
+            left: 19,
             child: Container(
               width: 320.0,
               height: 300.0,
@@ -87,33 +89,77 @@ class _TextListScreenState extends State<TextListScreen> {
                   final texts = snapshot.data!.docs
                       .map((doc) => doc['text'] as String)
                       .toList();
-                  return ListView.builder(
-                    itemCount: texts.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 5.0),
-                          child: Center(
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 8.0), // 下線の下に8ピクセルの隙間を作成
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    width: 2.0,
-                                    color: Colors.black
-                                  )
-                                ), // 下線を作成
-                              ),
-                              child: Text(
-                                texts[index],
-                                style: TextStyle(
-                                  decoration: TextDecoration.none, // 下線はContainerで作成するので、Textの下線を無効化
-                                ),
-                              ),
+                  return Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: texts.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0,
+                                    vertical: 5.0,
+                                  ),
+                                  child: Center(
+                                    child: Container(
+                                      padding: EdgeInsets.only(bottom: 8.0),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(width: 2.0, color: Colors.black),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        texts[index],
+                                        style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        right: 10.0,
+                        top: 10.0,
+                        // bottom: 10.0,
+                        child: FloatingActionButton(
+                          onPressed: () async {
+                            int id = await _generateId();
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Enter Text'),
+                                  content: TextField(
+                                    controller: _textEditingController,
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      child: Text('Add'),
+                                      onPressed: () {
+                                        String enteredText = _textEditingController.text;
+                                        _addTextToFirestore(enteredText, id);
+                                        _textEditingController.clear();
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Icon(
+                            Icons.add,
+                          ),
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   );
                 },
               ),
@@ -121,35 +167,7 @@ class _TextListScreenState extends State<TextListScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          int id = await _generateId();
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Enter Text'),
-                content: TextField(
-                  controller: _textEditingController,
-                ),
-                actions: [
-                  ElevatedButton(
-                    child: Text('Add'),
-                    onPressed: () {
-                      String enteredText = _textEditingController.text;
-                      _addTextToFirestore(enteredText, id);
-                      _textEditingController.clear();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        child: Icon(Icons.add),
-      ),
-      bottomNavigationBar:  Theme(
+       bottomNavigationBar:  Theme(
         data: ThemeData(
           canvasColor: Colors.black, // ボトムナビゲーションの背景黒にする
         ),
@@ -207,17 +225,17 @@ class _TextListScreenState extends State<TextListScreen> {
                   ),
                   label: ' ',
                 ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle, // 円形の装飾
-                      color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
-                    ),
-                    padding: EdgeInsets.all(10.0), // アイコンの余白
-                    child: Icon(Icons.help_outline),
-                  ),
-                  label: ' ',
-                ),
+                // BottomNavigationBarItem( // ボタンは4つなので、コメントアウト
+                //   icon: Container(
+                //     decoration: BoxDecoration(
+                //       shape: BoxShape.circle, // 円形の装飾
+                //       color: selectedIndex == 4 ? Colors.blue : Colors.transparent, // 選択中の場合は青い色、それ以外は透明な色
+                //     ),
+                //     padding: EdgeInsets.all(10.0), // アイコンの余白
+                //     child: Icon(Icons.help_outline),
+                //   ),
+                //   label: ' ',
+                // ),
               ],
               currentIndex: selectedIndex,
               onTap: (int index) {
