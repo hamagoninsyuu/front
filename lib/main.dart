@@ -18,8 +18,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'chat App',
       debugShowCheckedModeBanner: false,  // ラベル消す
-      // home: TextListScreen(), // 定型文に飛ぶ
-      // home: ChatRoom(), // チャット画面に飛ぶ
       home: MyToggleButtonScreen(), // ホーム画面に飛ぶ
     );
   }

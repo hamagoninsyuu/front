@@ -207,7 +207,7 @@ class _TimeListScreenState extends State<TimeListScreen> {
                   ),
                   label: ' ',
                 ),
-                // BottomNavigationBarItem(
+                // BottomNavigationBarItem( // ボタンは4つなので、コメントアウト
                 //   icon: Container(
                 //     decoration: BoxDecoration(
                 //       shape: BoxShape.circle, // 円形の装飾

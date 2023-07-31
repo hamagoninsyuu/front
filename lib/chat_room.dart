@@ -285,7 +285,7 @@ class ChatRoomState extends State<ChatRoom> {
                   ),
                   label: ' ',
                 ),
-                // BottomNavigationBarItem(
+                // BottomNavigationBarItem( // ボタンは4つなので、コメントアウト
                 //   icon: Container(
                 //     decoration: BoxDecoration(
                 //       shape: BoxShape.circle, // 円形の装飾

@@ -225,7 +225,7 @@ class _TextListScreenState extends State<TextListScreen> {
                   ),
                   label: ' ',
                 ),
-                // BottomNavigationBarItem(
+                // BottomNavigationBarItem( // ボタンは4つなので、コメントアウト
                 //   icon: Container(
                 //     decoration: BoxDecoration(
                 //       shape: BoxShape.circle, // 円形の装飾
